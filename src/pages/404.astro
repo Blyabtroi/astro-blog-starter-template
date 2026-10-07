@@ -1,0 +1,15 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getLocaleFromUrl, useTranslations } from '../i18n/ui';
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const home = getRelativeLocaleUrl(locale, '/');
+---
+
+<PageLayout locale={locale} title={t('404.title')} description={t('404.lead')}>
+	<h1>{t('404.title')}</h1>
+	<p>{t('404.lead')}</p>
+	<p><a href={home}>{t('404.home')}</a></p>
+</PageLayout>

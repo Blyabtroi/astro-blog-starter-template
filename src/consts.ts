@@ -1,5 +1,7 @@
-// Place any global data in this file.
-// You can import this data from anywhere in your site by using the `import` keyword.
-
 export const SITE_TITLE = "Mind Arts";
-export const SITE_DESCRIPTION = "Welcome to my website!";
+
+export const SITE_DESCRIPTION_RU =
+	"Проекты, статьи и заметки Василия Козлова — Mind Arts.";
+
+export const SITE_DESCRIPTION_EN =
+	"Projects, articles, and notes by Vasiliy Kozlov — Mind Arts.";

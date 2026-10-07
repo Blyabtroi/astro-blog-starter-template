@@ -1,0 +1,73 @@
+---
+import type { Project } from '../data/projects';
+import { projectHref } from '../data/projects';
+import type { Locale } from '../i18n/ui';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+	project: Project;
+	locale: Locale;
+}
+
+const { project, locale } = Astro.props;
+const t = useTranslations(locale);
+const href = projectHref(project);
+const isExternal = Boolean(project.externalUrl);
+---
+
+<article class="project-card">
+	<h3><a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>{project.title[locale]}</a></h3>
+	<p>{project.description[locale]}</p>
+	{project.tags.length > 0 && (
+		<ul class="tags">
+			{project.tags.map((tag) => (
+				<li>{tag}</li>
+			))}
+		</ul>
+	)}
+	<p class="cta">
+		<a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>
+			{isExternal ? t('projects.external') : t('projects.open')} →
+		</a>
+	</p>
+</article>
+
+<style>
+	.project-card {
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 12px;
+		padding: 1.25rem;
+		background: white;
+		box-shadow: var(--box-shadow);
+	}
+	h3 {
+		margin: 0 0 0.5rem;
+	}
+	h3 a {
+		color: rgb(var(--black));
+		text-decoration: none;
+	}
+	h3 a:hover {
+		color: var(--accent);
+	}
+	p {
+		margin: 0.5rem 0;
+		color: rgb(var(--gray-dark));
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		list-style: none;
+		padding: 0;
+		margin: 0.75rem 0 0;
+		font-size: 0.85em;
+		color: rgb(var(--gray));
+	}
+	.cta {
+		margin-top: 1rem;
+	}
+	.cta a {
+		font-weight: 600;
+	}
+</style>

@@ -1,0 +1,94 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import ProjectCard from './ProjectCard.astro';
+import FormattedDate from './FormattedDate.astro';
+import { SITE_TITLE, SITE_DESCRIPTION_RU, SITE_DESCRIPTION_EN } from '../consts';
+import { sortedProjects } from '../data/projects';
+import { getCollection } from 'astro:content';
+import type { Locale } from '../i18n/ui';
+import { useTranslations } from '../i18n/ui';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { blogPostUrl, postSlug } from '../lib/blog';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const description = locale === 'ru' ? SITE_DESCRIPTION_RU : SITE_DESCRIPTION_EN;
+const featured = sortedProjects().filter((p) => p.featured).slice(0, 4);
+const posts = (await getCollection('blog', ({ data }) => data.locale === locale))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
+const projectsUrl = getRelativeLocaleUrl(locale, '/projects');
+const blogUrl = getRelativeLocaleUrl(locale, '/blog');
+---
+
+<PageLayout locale={locale} title={SITE_TITLE} description={description}>
+	<section class="hero">
+		<h1>{t('home.title')}</h1>
+		<p class="lead">{t('home.lead')}</p>
+	</section>
+
+	<section>
+		<h2>{t('home.featuredProjects')}</h2>
+		<div class="grid">
+			{featured.map((project) => <ProjectCard project={project} locale={locale} />)}
+		</div>
+		<p><a href={projectsUrl}>{t('home.allProjects')} →</a></p>
+	</section>
+
+	<section>
+		<h2>{t('home.recentPosts')}</h2>
+		<ul class="posts">
+			{
+				posts.map((post) => (
+					<li>
+						<a href={blogPostUrl(locale, postSlug(post))}>
+							<span class="post-title">{post.data.title}</span>
+							<FormattedDate date={post.data.pubDate} locale={locale} />
+						</a>
+					</li>
+				))
+			}
+		</ul>
+		<p><a href={blogUrl}>{t('home.allPosts')} →</a></p>
+	</section>
+</PageLayout>
+
+<style>
+	.hero h1 {
+		margin-top: 0;
+	}
+	.lead {
+		font-size: 1.15rem;
+		color: rgb(var(--gray-dark));
+		max-width: 42rem;
+	}
+	.grid {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	}
+	.posts {
+		list-style: none;
+		padding: 0;
+	}
+	.posts li {
+		margin-bottom: 0.75rem;
+	}
+	.posts a {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1rem;
+		text-decoration: none;
+		color: rgb(var(--black));
+	}
+	.posts a:hover .post-title {
+		color: var(--accent);
+	}
+	.post-title {
+		font-weight: 600;
+	}
+</style>

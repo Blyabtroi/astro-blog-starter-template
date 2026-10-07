@@ -1,0 +1,33 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { Locale } from '../i18n/ui';
+import { stripEnPrefix, useTranslations } from '../i18n/ui';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const otherLocale: Locale = locale === 'ru' ? 'en' : 'ru';
+const neutralPath = stripEnPrefix(Astro.url.pathname);
+const switchUrl = getRelativeLocaleUrl(otherLocale, neutralPath);
+---
+
+<a class="lang-switch" href={switchUrl} hreflang={otherLocale} rel="alternate">
+	{t('lang.switch')}
+</a>
+
+<style>
+	.lang-switch {
+		font-size: 0.9em;
+		padding: 0.5em 0.75em;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 6px;
+		white-space: nowrap;
+	}
+	.lang-switch:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+</style>
