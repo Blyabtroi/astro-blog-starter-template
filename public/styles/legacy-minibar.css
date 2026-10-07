@@ -1,0 +1,80 @@
+/* Mind Arts chrome for legacy product landings (minibar only). */
+
+.ma-minibar {
+	--ma-bg: #f9f7f7;
+	--ma-ink: #2d2624;
+	--ma-accent: #c13832;
+	--ma-line: color-mix(in oklab, #2d2624 17%, #f9f7f7);
+	--ma-font: "Source Sans 3", system-ui, sans-serif;
+	--ma-font-display: "Montserrat", system-ui, sans-serif;
+
+	position: sticky;
+	top: 0;
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 2.75rem;
+	padding: 0.35rem 1rem;
+	font-family: var(--ma-font);
+	font-size: 0.9rem;
+	background: color-mix(in oklab, var(--ma-ink) 6%, var(--ma-bg));
+	border-bottom: 1px solid var(--ma-line);
+	backdrop-filter: blur(8px);
+}
+
+.ma-minibar--night {
+	--ma-bg: #22201f;
+	--ma-ink: #f0efee;
+	--ma-accent: #f47967;
+	--ma-line: color-mix(in oklab, #f0efee 17%, #22201f);
+}
+
+.ma-minibar__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	width: min(60rem, 100%);
+}
+
+.ma-minibar__brand {
+	font-family: var(--ma-font-display);
+	font-weight: 600;
+	color: var(--ma-ink);
+	text-decoration: none;
+}
+
+.ma-minibar__brand:hover {
+	color: var(--ma-accent);
+}
+
+.ma-minibar__link {
+	color: color-mix(in oklab, var(--ma-ink) 62%, var(--ma-bg));
+	text-decoration: none;
+}
+
+.ma-minibar__link:hover {
+	color: var(--ma-accent);
+}
+
+.ma-minibar__theme {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	padding: 0;
+	border: 1px solid var(--ma-line);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--ma-ink);
+	cursor: pointer;
+	font-size: 1rem;
+	line-height: 1;
+}
+
+.ma-minibar__theme:hover {
+	border-color: var(--ma-accent);
+	color: var(--ma-accent);
+}

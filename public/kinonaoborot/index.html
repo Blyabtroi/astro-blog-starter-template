@@ -1,25 +1,874 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Кино наоборот — Mind Arts</title>
-		<style>
-			body {
-				font-family: system-ui, sans-serif;
-				max-width: 40rem;
-				margin: 3rem auto;
-				padding: 0 1rem;
-				line-height: 1.5;
-			}
-		</style>
-	</head>
-	<body>
-		<h1>Кино наоборот</h1>
-		<p>
-			Заглушка лендинга. Замените содержимое папки <code>public/kinonaoborot/</code> на полные
-			исходники с текущего хостинга.
-		</p>
-		<p><a href="/">← Mind Arts</a></p>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <title>Кино наоборот - угадай фильм по перевёртышу</title>
+    <meta name="description" content="Бот кидает перевёрнутое название, вы угадываете фильм. Сначала сыграйте в открытую в @kinonaoborotgame, потом добавьте бота в свою группу.">
+    <meta property="og:title" content="Кино наоборот">
+    <meta property="og:description" content="«Хилое семечко» - это «Крепкий орешек». Угадай фильм по перевёртышу в Telegram или в приложении.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="app-icon.png">
+    <link rel="icon" href="app-icon.png">
+    <link rel="apple-touch-icon" href="app-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #f6f3ee;
+            --card: rgba(255, 255, 255, 0.9);
+            --line: rgba(28, 18, 40, 0.1);
+            --text: #16121c;
+            --muted: #5b5568;
+            --cyan: #0e9ea8;
+            --magenta: #c026d3;
+            --orange: #ea580c;
+            --gold: #b45309;
+            --ok: #15803d;
+            --bad: #be123c;
+            --chip-bg: #fff;
+            --input-bg: #fff;
+            --surface: rgba(22, 18, 32, 0.04);
+            --phone-bezel: #2a2438;
+            --btn-ghost-bg: rgba(22, 18, 32, 0.04);
+            --glow-cyan: rgba(14, 158, 168, 0.18);
+            --glow-magenta: rgba(192, 38, 211, 0.12);
+            --glow-orange: rgba(234, 88, 12, 0.12);
+            --perforation: rgba(22, 18, 32, 0.05);
+            --radius: 28px;
+            --shadow: 0 18px 50px rgba(40, 20, 60, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #07060c;
+                --card: rgba(22, 18, 32, 0.86);
+                --line: rgba(255, 255, 255, 0.1);
+                --text: #f6f3ee;
+                --muted: #b7b0c2;
+                --cyan: #2de2e6;
+                --magenta: #e23cec;
+                --orange: #ff8a3d;
+                --gold: #f5c542;
+                --ok: #4ade80;
+                --bad: #fb7185;
+                --chip-bg: #16121f;
+                --input-bg: #0b0a10;
+                --surface: rgba(255, 255, 255, 0.03);
+                --phone-bezel: #1a1624;
+                --btn-ghost-bg: rgba(255, 255, 255, 0.05);
+                --glow-cyan: rgba(45, 226, 230, 0.16);
+                --glow-magenta: rgba(226, 60, 236, 0.18);
+                --glow-orange: rgba(255, 138, 61, 0.12);
+                --perforation: rgba(255, 255, 255, 0.015);
+                --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(1200px 500px at 10% -10%, var(--glow-cyan), transparent 55%),
+                radial-gradient(900px 480px at 100% 0%, var(--glow-magenta), transparent 50%),
+                radial-gradient(700px 400px at 50% 100%, var(--glow-orange), transparent 45%),
+                var(--bg);
+            color: var(--text);
+            line-height: 1.55;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent 0 18px,
+                var(--perforation) 18px 19px
+            );
+            mask-image: linear-gradient(90deg, #000 0, transparent 8%, transparent 92%, #000 100%);
+            z-index: 0;
+        }
+
+        a { color: var(--cyan); }
+        img { max-width: 100%; display: block; }
+
+        .wrap {
+            width: min(1120px, calc(100% - 2rem));
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .skip {
+            position: absolute;
+            left: -999px;
+            top: 0;
+        }
+        .skip:focus { left: 1rem; top: 1rem; background: var(--bg); color: var(--text); padding: 0.5rem 1rem; z-index: 20; }
+
+        header.nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.1rem 0 0.4rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: inherit;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .brand img {
+            width: 46px;
+            height: 46px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(40, 20, 80, 0.22);
+            animation: owl-spin 7s linear infinite;
+        }
+
+        .brand img.revved {
+            animation-duration: 0.45s;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.2rem;
+            font-size: 0.92rem;
+            color: var(--muted);
+        }
+
+        .nav-links a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--text); }
+
+        .hero {
+            padding: 2.4rem 0 1.2rem;
+            text-align: center;
+        }
+
+        .kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 0.82rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        h1, h2, .display {
+            font-family: Unbounded, Manrope, sans-serif;
+            letter-spacing: -0.03em;
+            line-height: 1.08;
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 6vw, 4.4rem);
+            font-weight: 800;
+            margin: 1rem auto 0.8rem;
+            max-width: 16ch;
+        }
+
+        .grad {
+            background: linear-gradient(110deg, var(--cyan), var(--magenta) 45%, var(--orange) 78%, var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .lede {
+            font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+            color: var(--muted);
+            max-width: 38rem;
+            margin: 0 auto 1.6rem;
+        }
+
+        .ctas {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            text-decoration: none;
+            border-radius: 999px;
+            padding: 0.95rem 1.4rem;
+            font-weight: 800;
+            font-size: 1rem;
+            border: 1px solid transparent;
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        .btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+
+        .btn-primary {
+            color: #140814;
+            background: linear-gradient(90deg, #2de2e6, #7cf0ff 30%, #e23cec);
+            box-shadow: 0 10px 30px rgba(45, 226, 230, 0.22);
+        }
+
+        .btn-ghost {
+            color: var(--text);
+            background: var(--btn-ghost-bg);
+            border-color: var(--line);
+        }
+
+        .note {
+            margin-top: 0.9rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .marquee {
+            overflow: hidden;
+            margin: 2.4rem 0 0.4rem;
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            border-block: 1px solid var(--line);
+            background: var(--surface);
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 0.7rem;
+            width: max-content;
+            padding: 0.85rem 0;
+            animation: drift 42s linear infinite;
+        }
+
+        .chip {
+            flex: none;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--chip-bg);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .chip span { color: var(--muted); font-weight: 500; }
+
+        @keyframes drift {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        section { padding: 3.4rem 0; }
+
+        h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); margin-bottom: 0.7rem; }
+        .section-lead { color: var(--muted); max-width: 40rem; margin-bottom: 1.6rem; }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 1.4rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px);
+        }
+
+        .demo {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 1.2rem;
+            align-items: stretch;
+        }
+
+        .riddle {
+            font-family: Unbounded, sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.1rem);
+            line-height: 1.2;
+            margin: 0.4rem 0 1rem;
+        }
+
+        .demo label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .guess-row {
+            display: flex;
+            gap: 0.6rem;
+        }
+
+        .guess-row input {
+            flex: 1;
+            min-width: 0;
+            background: var(--input-bg);
+            border: 1px solid var(--line);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 0.85rem 1rem;
+            font: inherit;
+        }
+
+        .guess-row input:focus {
+            outline: 2px solid var(--magenta);
+            border-color: transparent;
+        }
+
+        .guess-row button {
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .status {
+            min-height: 3.2rem;
+            margin-top: 0.9rem;
+            color: var(--muted);
+        }
+
+        .status.ok { color: var(--ok); }
+        .status.bad { color: var(--bad); }
+
+        .meta {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.9rem;
+        }
+
+        .step {
+            padding: 1.15rem;
+            border-radius: 22px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+        }
+
+        .num {
+            font-family: Unbounded, sans-serif;
+            color: var(--orange);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step h3 { font-size: 1.05rem; margin-bottom: 0.35rem; }
+        .step p { color: var(--muted); font-size: 0.95rem; }
+
+        .trio {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .cmds {
+            margin-top: 0.9rem;
+            display: grid;
+            gap: 0.45rem;
+            font-size: 0.95rem;
+        }
+
+        .cmds code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            color: var(--gold);
+        }
+
+        .shots {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .phone {
+            width: min(240px, 100%);
+            border-radius: 32px;
+            overflow: hidden;
+            border: 8px solid var(--phone-bezel);
+            box-shadow: var(--shadow);
+            background: #000;
+        }
+
+        .phone img { width: 100%; height: auto; }
+
+        .faq { display: grid; gap: 0.7rem; }
+
+        details {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 0.9rem 1.1rem;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 800;
+            list-style: none;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+        details p { color: var(--muted); margin-top: 0.5rem; }
+
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 1.6rem 0 2.4rem;
+            color: var(--muted);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        footer a { color: inherit; }
+
+        @keyframes owl-spin {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        .blink-new {
+            display: inline-block;
+            margin-left: 0.35rem;
+            padding: 0 0.35rem;
+            background: #ff0;
+            color: #c00;
+            font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            animation: blink 1s steps(2, jump-end) infinite;
+            border: 1px solid #c00;
+        }
+
+        @keyframes blink {
+            50% { background: #c00; color: #ff0; }
+        }
+
+        .spark {
+            position: fixed;
+            z-index: 80;
+            pointer-events: none;
+            font-size: 14px;
+            line-height: 1;
+            animation: spark-out 0.65s ease-out forwards;
+            text-shadow: 0 0 6px currentColor;
+        }
+
+        @keyframes spark-out {
+            to {
+                transform: translateY(18px) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        .hit-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.85rem 0 0.2rem;
+            padding: 0.35rem 0.65rem;
+            background: #111;
+            color: #39ff14;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            border: 3px solid;
+            border-color: #eee #555 #555 #eee;
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        .hit-counter span {
+            background: #031;
+            padding: 0.05rem 0.35rem;
+            min-width: 7.5ch;
+            text-align: right;
+        }
+
+        .nineties-note {
+            margin-top: 0.55rem;
+            font-size: 0.72rem;
+            font-family: "Times New Roman", Times, serif;
+        }
+
+        @media (max-width: 860px) {
+            .nav-links { display: none; }
+            .demo, .trio, .steps { grid-template-columns: 1fr; }
+            .hero { padding-top: 1.4rem; }
+            .spark { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .marquee-track, .brand img, .blink-new, .spark { animation: none; }
+            .btn { transition: none; }
+            html { scroll-behavior: auto; }
+        }
+    </style>
+    <link rel="stylesheet" href="/styles/legacy-minibar.css">
+</head>
+<body>
+    <nav class="ma-minibar" data-ma-minibar aria-label="Mind Arts">
+        <div class="ma-minibar__inner">
+            <a class="ma-minibar__brand" href="/">Mind Arts</a>
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <a class="ma-minibar__link" href="/projects/">Все проекты</a>
+                <button type="button" class="ma-minibar__theme" data-ma-theme-toggle aria-label="Переключить тему">◐</button>
+            </div>
+        </div>
+    </nav>
+    <script src="/js/legacy-minibar.js" defer></script>
+    <a class="skip" href="#play">К игре</a>
+    <div class="wrap">
+        <header class="nav">
+            <a class="brand" href="#" id="owl-spin">
+                <img src="app-icon.png" alt="Перевернутая сова - иконка Кино наоборот" id="owl">
+                Кино наоборот
+            </a>
+            <nav class="nav-links">
+                <a href="#how">Как играть</a>
+                <a href="#bot">Где играть</a>
+                <a href="#app">Приложение</a>
+                <a href="#faq">Вопросы</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <p class="kicker">Внимание · Камера · Мотор <span class="blink-new">NEW!</span></p>
+            <h1>Угадай фильм по <span class="grad">перевёртышу</span></h1>
+            <p class="lede">Перевёрнутое название - вы угадываете фильм. В Telegram это играется компанией, на iPhone - в одиночку, в том же правиле: три попытки, две подсказки, постер если попали.</p>
+            <div class="ctas">
+                <a class="btn btn-primary" href="https://t.me/kinonaoborotgame">Играть в общей группе</a>
+                <a class="btn btn-ghost" href="https://t.me/KinoNaoborotBot?startgroup=true">Добавить бота к себе</a>
+                <a class="btn btn-ghost" href="https://apps.apple.com/tj/app/кино-наоборот-угадай-фильм/id6760938633">Приложение в App Store</a>
+            </div>
+            <p class="note">Бесплатно · Без регистрации · Telegram и iPhone</p>
+        </section>
+    </div>
+
+    <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+            <div class="chip">Хилое семечко <span>→ Крепкий орешек</span></div>
+            <div class="chip">Ночь крота <span>→ День сурка</span></div>
+            <div class="chip">Животные в белом <span>→ Люди в чёрном</span></div>
+            <div class="chip">Как разучить кота <span>→ Как приручить дракона</span></div>
+            <div class="chip">Вперёд из прошлого <span>→ Назад в будущее</span></div>
+            <div class="chip">Сестра <span>→ Брат</span></div>
+            <div class="chip">Позор <span>→ Престиж</span></div>
+            <div class="chip">Ля-Ля-Земля <span>→ Ла-Ла Ленд</span></div>
+            <div class="chip">Хилое семечко <span>→ Крепкий орешек</span></div>
+            <div class="chip">Ночь крота <span>→ День сурка</span></div>
+            <div class="chip">Животные в белом <span>→ Люди в чёрном</span></div>
+            <div class="chip">Как разучить кота <span>→ Как приручить дракона</span></div>
+            <div class="chip">Вперёд из прошлого <span>→ Назад в будущее</span></div>
+            <div class="chip">Сестра <span>→ Брат</span></div>
+            <div class="chip">Позор <span>→ Престиж</span></div>
+            <div class="chip">Ля-Ля-Земля <span>→ Ла-Ла Ленд</span></div>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <section id="play">
+            <h2>Проба пера, без Telegram</h2>
+            <p class="section-lead">Один кадр прямо здесь. В чате так же: видите перевёртыш, пишете фильм, бот либо кидает постер, либо язвит.</p>
+            <div class="demo">
+                <div class="panel">
+                    <p class="meta">
+                        <span id="round">Кадр 1 из 3</span>
+                        <span id="tries">Попытки: 🎯🎯🎯</span>
+                    </p>
+                    <p class="riddle" id="riddle">🤔 …</p>
+                    <form id="guess-form">
+                        <label for="guess">Название фильма</label>
+                        <div class="guess-row">
+                            <input id="guess" name="guess" autocomplete="off" placeholder="Ну же, это классика">
+                            <button class="btn btn-primary" type="submit">Угадать</button>
+                        </div>
+                    </form>
+                    <p class="status" id="status">Бот молчит. Это ваш ход.</p>
+                </div>
+                <div class="panel">
+                    <h3>Что это вообще</h3>
+                    <p class="section-lead" style="margin:0.5rem 0 0">Каждое название вывернуто наизнанку: антонимы, зеркала, дурацкая логика. «Материк бедности» - не про ВВП, а про «Остров сокровищ».</p>
+                    <p class="section-lead" style="margin:0.9rem 0 0">Сотни таких карточек. Часть придумали игроки. Свой перевёртыш можно предложить боту командой <code>/add</code>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="how">
+            <h2>Как идёт партия</h2>
+            <p class="section-lead">Никаких меню на пять экранов. Бот бросает кадр, чат отвечает названиями, побеждает тот, кто первый попал в название.</p>
+            <div class="steps">
+                <article class="step">
+                    <div class="num">01</div>
+                    <h3>Заходите в игру</h3>
+                    <p>Общая группа - сразу с людьми. Своя группа - добавьте бота и напишите <code>/kino</code>.</p>
+                </article>
+                <article class="step">
+                    <div class="num">02</div>
+                    <h3>Выбираете сет</h3>
+                    <p>Тема: все / отечественные / комедии. На партию 5 или 10 минут.</p>
+                </article>
+                <article class="step">
+                    <div class="num">03</div>
+                    <h3>Отвечаете на карточку</h3>
+                    <p>В чат уходит только перевёртыш. Пишете название фильма. На каждый перевёртыш - 3 промаха.</p>
+                </article>
+                <article class="step">
+                    <div class="num">04</div>
+                    <h3>Постер или тишина</h3>
+                    <p>Угадали - постер и очки. Три промаха - фильм снимаем без названия и идём дальше. В конце - рейтинг.</p>
+                </article>
+            </div>
+            <div class="panel" style="margin-top:1.1rem">
+                <p><strong>Очки:</strong> 2 до подсказки, 1 после первой, 0 после второй. Подсказка - <code>/hint</code>, если все зависли на «ну это же очевидно».</p>
+                <p style="color:var(--muted);margin-top:0.5rem">Три промаха на фильм - карточка снимается без названия. Серия живых угадываний копится в рейтинге.</p>
+            </div>
+        </section>
+
+        <section id="bot">
+            <h2>Три входа в ту же игру</h2>
+            <p class="section-lead">Перевёртыш, три попытки, две подсказки. Меняется только зал: открытая группа, своя группа или iPhone.</p>
+            <div class="trio">
+                <article class="panel">
+                    <p class="kicker">Сначала сюда</p>
+                    <h3>Общая группа</h3>
+                    <p class="section-lead" style="margin:0">@kinonaoborotgame - открытая площадка. Можно посмотреть, как это играется вживую, не таща бота к друзьям «на посмотреть».</p>
+                    <div class="cmds">
+                        <div>Заходите, ждёте кадр, отвечаете названием.</div>
+                        <div>Не нужно никого уговаривать. Там уже кто-то играет.</div>
+                    </div>
+                    <p style="margin-top:1rem"><a class="btn btn-primary" href="https://t.me/kinonaoborotgame">Открыть группу</a></p>
+                </article>
+                <article class="panel">
+                    <p class="kicker">Потом домой</p>
+                    <h3>Своя группа</h3>
+                    <p class="section-lead" style="margin:0">Понравилось - кидаете @KinoNaoborotBot в рабочий чат, семейный или друзей. Партия не требует ведущего.</p>
+                    <div class="cmds">
+                        <div><code>/kino</code> - новая партия</div>
+                        <div><code>/hint</code> - подсказка к кадру</div>
+                        <div><code>/stop</code> - конец, рейтинг</div>
+                        <div><code>/rating</code> · <code>/add</code> - серии и свой перевёртыш</div>
+                    </div>
+                    <p style="margin-top:1rem"><a class="btn btn-ghost" href="https://t.me/KinoNaoborotBot?startgroup=true">Добавить бота</a></p>
+                </article>
+                <article class="panel" id="app">
+                    <p class="kicker">На iPhone</p>
+                    <h3>Приложение</h3>
+                    <p class="section-lead" style="margin:0">«Кино Наоборот: Угадай фильм» - соло, если нет чата под рукой. Тот же перевёртыш, без мессенджера.</p>
+                    <div class="cmds">
+                        <div>5-30 минут на заход, 3 попытки, 2 подсказки</div>
+                        <div>Постеры и проверка ответа с ИИ</div>
+                        <div>Топ по максимальной серии</div>
+                        <div>Пример: «Джон Майклович сохраняет хобби»</div>
+                    </div>
+                    <p style="margin-top:1rem"><a class="btn btn-ghost" href="https://apps.apple.com/tj/app/кино-наоборот-угадай-фильм/id6760938633">App Store</a></p>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2>Так это выглядит в приложении</h2>
+            <p class="section-lead">Промах, подсказка, постер. Игра вредная, но справедливая.</p>
+            <div class="shots">
+                <figure class="phone">
+                    <img src="400x800bb.png" alt="Экран iOS-приложения: промах по перевёртышу «Материк бедности», затем верный ответ «Остров сокровищ» и постер">
+                </figure>
+                <figure class="phone">
+                    <img src="400x800bb-2.png" alt="Экран iOS-приложения в тёмной теме: после угаданного фильма следующий перевёртыш">
+                </figure>
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2>Частые вопросы</h2>
+            <div class="faq">
+                <details open>
+                    <summary>С чего начать, если друзей ещё нет?</summary>
+                    <p>С общей группы <a href="https://t.me/kinonaoborotgame">@kinonaoborotgame</a> - там уже кто-то играет. Нет Telegram под рукой - <a href="https://apps.apple.com/tj/app/кино-наоборот-угадай-фильм/id6760938633">приложение на iPhone</a>. Если зайдёт компанией - добавляйте бота в свою группу.</p>
+                </details>
+                <details>
+                    <summary>Нужна регистрация?</summary>
+                    <p>Нет. В Telegram - просто чат. В приложении аккаунт тоже не нужен.</p>
+                </details>
+                <details>
+                    <summary>Чем приложение отличается от бота?</summary>
+                    <p>Правило то же: перевёртыш, попытки, подсказки, постер. Бот - для компании в группе. <a href="https://apps.apple.com/tj/app/кино-наоборот-угадай-фильм/id6760938633">Приложение</a> - соло на iPhone и iPad, 5-30 минут на заход, без мессенджера.</p>
+                </details>
+                <details>
+                    <summary>Это платно?</summary>
+                    <p>Игра бесплатная. Донат - по желанию, когда уже наигрались.</p>
+                </details>
+                <details>
+                    <summary>Бот засчитывает кривые ответы?</summary>
+                    <p>Буква в букву - сразу. Если почти то, но не то, смотрит смысл и может принять. Три промаха на кадр общие на весь чат, название при этом не раскрываем.</p>
+                </details>
+                <details>
+                    <summary>Как связаться?</summary>
+                    <p>Почта: <a href="mailto:blyabtroi@gmail.com">blyabtroi@gmail.com</a></p>
+                </details>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="wrap">
+            <p class="hit-counter">Вы посетитель № <span id="hits">0001337</span></p>
+            <p>© 2026 Василий Козлов · Кино наоборот</p>
+            <p class="nineties-note">Лучше всего смотрится в Netscape Navigator 4.0 при 800x600. Сову можно крутить.</p>
+            <p style="margin-top:0.4rem">
+                <a href="privacy.html">Политика конфиденциальности</a>
+                ·
+                <a href="https://t.me/KinoNaoborotBot">@KinoNaoborotBot</a>
+                ·
+                <a href="https://t.me/kinonaoborotgame">@kinonaoborotgame</a>
+                ·
+                <a href="https://apps.apple.com/tj/app/кино-наоборот-угадай-фильм/id6760938633">App Store</a>
+            </p>
+            <p style="margin-top:0.8rem;font-size:0.75rem">Apple и логотип Apple являются товарными знаками Apple Inc., зарегистрированными в США и других странах.</p>
+        </div>
+    </footer>
+
+    <script>
+        const RIDDLES = [
+            { antonym: "Хилое семечко", title: "Крепкий орешек", answers: ["крепкий орешек", "die hard"] },
+            { antonym: "Ночь крота", title: "День сурка", answers: ["день сурка", "groundhog day"] },
+            { antonym: "Животные в белом", title: "Люди в чёрном", answers: ["люди в черном", "люди в чёрном", "men in black"] }
+        ];
+        const FAILS = [
+            "Не-а… Зато теперь вы знаете один НЕверный ответ.",
+            "Это не тот фильм. Это другой фильм.",
+            "Не угадали. Но претензия оформлена."
+        ];
+
+        const form = document.getElementById("guess-form");
+        const input = document.getElementById("guess");
+        const riddleEl = document.getElementById("riddle");
+        const statusEl = document.getElementById("status");
+        const roundEl = document.getElementById("round");
+        const triesEl = document.getElementById("tries");
+
+        let index = 0;
+        let left = 3;
+
+        function norm(value) {
+            return value.toLowerCase().replace(/ё/g, "е").replace(/[^a-zа-я0-9]+/gi, " ").trim();
+        }
+
+        function show() {
+            riddleEl.textContent = "🤔 " + RIDDLES[index].antonym;
+            roundEl.textContent = "Кадр " + (index + 1) + " из " + RIDDLES.length;
+            triesEl.textContent = "Попытки: " + "🎯".repeat(left) + "○".repeat(3 - left);
+            input.value = "";
+            input.focus();
+        }
+
+        function nextRiddle(message, kind) {
+            statusEl.textContent = message;
+            statusEl.className = "status " + kind;
+            left = 3;
+            index += 1;
+            if (index >= RIDDLES.length) {
+                riddleEl.textContent = "🎬 Снято";
+                form.querySelector("button").disabled = true;
+                input.disabled = true;
+                statusEl.textContent = "Дальше - в Telegram. В общей группе уже кто-то играет.";
+                statusEl.className = "status ok";
+                triesEl.textContent = "Попытки: -";
+                roundEl.textContent = "Кадр 3 из 3";
+                return;
+            }
+            show();
+        }
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const guess = norm(input.value);
+            if (!guess) return;
+            const current = RIDDLES[index];
+            if (current.answers.some(function (item) { return norm(item) === guess; })) {
+                nextRiddle("Верно: «" + current.title + "». Постер был бы здесь, но вы на сайте.", "ok");
+                return;
+            }
+            left -= 1;
+            if (left <= 0) {
+                nextRiddle("Три промаха. В настоящей партии название не спойлерим. Здесь подскажем: это «" + current.title + "».", "bad");
+                return;
+            }
+            statusEl.textContent = FAILS[(3 - left - 1) % FAILS.length] + " Осталось " + left + ".";
+            statusEl.className = "status bad";
+            triesEl.textContent = "Попытки: " + "🎯".repeat(left) + "○".repeat(3 - left);
+            input.select();
+        });
+
+        show();
+
+        (function nineties() {
+            var owl = document.getElementById("owl");
+            var hits = document.getElementById("hits");
+            var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            var fine = window.matchMedia("(pointer: fine)").matches;
+            var colors = ["#ff0033", "#ff7a00", "#ffe600", "#22c55e", "#00b7ff", "#ff4fd8"];
+            var glyphs = ["✦", "★", "✧", "·"];
+            var lastSpark = 0;
+
+            var day0 = Date.UTC(2026, 3, 1);
+            var days = Math.max(0, Math.floor((Date.now() - day0) / 86400000));
+            var seen = 0;
+            try { seen = parseInt(localStorage.getItem("kn-hits") || "0", 10) || 0; } catch (e) {}
+            seen += 1;
+            try { localStorage.setItem("kn-hits", String(seen)); } catch (e) {}
+            hits.textContent = String(1337 + days * 7 + seen).padStart(7, "0");
+
+            var owlLink = document.getElementById("owl-spin");
+            if (owl && owlLink) {
+                owlLink.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    owl.classList.add("revved");
+                    window.setTimeout(function () { owl.classList.remove("revved"); }, 1400);
+                });
+            }
+
+            if (reduce || !fine) return;
+
+            document.addEventListener("pointermove", function (event) {
+                if (event.pointerType && event.pointerType !== "mouse") return;
+                var now = Date.now();
+                if (now - lastSpark < 40) return;
+                lastSpark = now;
+                var spark = document.createElement("span");
+                spark.className = "spark";
+                spark.setAttribute("aria-hidden", "true");
+                spark.textContent = glyphs[now % glyphs.length];
+                spark.style.left = event.clientX + "px";
+                spark.style.top = event.clientY + "px";
+                spark.style.color = colors[now % colors.length];
+                document.body.appendChild(spark);
+                window.setTimeout(function () { spark.remove(); }, 700);
+            });
+        })();
+    </script>
+</body>
 </html>

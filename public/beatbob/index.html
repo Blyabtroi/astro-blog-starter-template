@@ -1,25 +1,427 @@
-<!doctype html>
-<html lang="ru">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Beatbob — Mind Arts</title>
-		<style>
-			body {
-				font-family: system-ui, sans-serif;
-				max-width: 40rem;
-				margin: 3rem auto;
-				padding: 0 1rem;
-				line-height: 1.5;
-			}
-		</style>
-	</head>
-	<body>
-		<h1>Beatbob</h1>
-		<p>
-			Заглушка лендинга. Замените содержимое папки <code>public/beatbob/</code> на полные исходники
-			с текущего хостинга.
-		</p>
-		<p><a href="/">← Mind Arts</a></p>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>BeatBob — headbangs to your music</title>
+    <meta name="description" content="BeatBob locks onto the beat from nearby music and makes Bob nod along. Mic only while you listen. iPhone, iOS 17+.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --pink: #f2738c;
+            --pink-hot: #f24d6f;
+            --pink-soft: #f5a0b0;
+            --sky: #a8d4e8;
+            --mist: #edf5f9;
+            --ink: #1e2a38;
+            --ink-soft: #5a6b7d;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: "Nunito", -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ink);
+            line-height: 1.5;
+            min-height: 100vh;
+            background: var(--mist);
+        }
+
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(
+                145deg,
+                #edf5f9 0%,
+                rgba(242, 115, 140, 0.18) 38%,
+                rgba(168, 212, 232, 0.55) 100%
+            );
+            animation: breathe 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes breathe {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(8deg); }
+        }
+
+        .wrap {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 0 20px 48px;
+        }
+
+        .top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0 8px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .brand img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 14px rgba(242, 115, 140, 0.35);
+        }
+
+        .top a.ghost {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--ink-soft);
+            text-decoration: none;
+        }
+
+        .top a.ghost:hover { color: var(--pink-hot); }
+
+        .hero-art {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            display: block;
+            border-radius: 24px;
+            box-shadow: 0 24px 48px rgba(30, 42, 56, 0.12);
+            animation: bob 2.8s ease-in-out infinite;
+        }
+
+        @keyframes bob {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-6px) rotate(-0.6deg); }
+            75% { transform: translateY(4px) rotate(0.5deg); }
+        }
+
+        .hero-copy {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .hero-copy h1 {
+            font-size: 1.65rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .hero-copy .sub {
+            margin-top: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+        }
+
+        .cta {
+            display: block;
+            margin: 24px auto 0;
+            max-width: 280px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--pink) 0%, var(--pink-hot) 100%);
+            color: white;
+            font-weight: 800;
+            font-size: 1.05rem;
+            padding: 16px 24px;
+            border-radius: 999px;
+            text-decoration: none;
+            box-shadow: 0 10px 28px rgba(242, 77, 111, 0.4);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .cta:hover {
+            transform: scale(1.03);
+            box-shadow: 0 14px 32px rgba(242, 77, 111, 0.5);
+        }
+
+        .cta-note {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+        }
+
+        .cards {
+            display: grid;
+            gap: 12px;
+            margin-top: 36px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 16px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 24px rgba(30, 42, 56, 0.06);
+        }
+
+        .card strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .card span {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+        }
+
+        .card .emoji {
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+
+        .genres {
+            margin-top: 36px;
+            text-align: center;
+        }
+
+        .genres h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .genre-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .genre-chip {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .genre-chip img {
+            width: 64px;
+            height: 88px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.6);
+            padding: 4px;
+        }
+
+        @media (min-width: 400px) {
+            .genre-chip img {
+                width: 72px;
+                height: 98px;
+            }
+        }
+
+        .genre-chip label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--pink-hot);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .steps {
+            margin-top: 36px;
+            text-align: center;
+        }
+
+        .steps h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .step-line {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .step {
+            background: white;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--ink);
+            box-shadow: 0 4px 12px rgba(30, 42, 56, 0.08);
+        }
+
+        .step em {
+            color: var(--pink-hot);
+            font-style: normal;
+        }
+
+        .support {
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.55);
+        }
+
+        .support p {
+            font-weight: 600;
+            color: var(--ink-soft);
+            font-size: 0.95rem;
+        }
+
+        .support a {
+            color: var(--pink-hot);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .support a:hover { text-decoration: underline; }
+
+        footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+        }
+
+        footer a {
+            color: var(--ink-soft);
+            text-decoration: none;
+        }
+
+        footer a:hover { color: var(--pink-hot); }
+
+        @media (min-width: 600px) {
+            .wrap { max-width: 560px; }
+            .hero-copy h1 { font-size: 1.85rem; }
+            .cards { grid-template-columns: 1fr 1fr; }
+            .cards .card:first-child { grid-column: 1 / -1; }
+        }
+    </style>
+    <link rel="stylesheet" href="/styles/legacy-minibar.css">
+</head>
+<body>
+    <nav class="ma-minibar" data-ma-minibar aria-label="Mind Arts">
+        <div class="ma-minibar__inner">
+            <a class="ma-minibar__brand" href="/">Mind Arts</a>
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <a class="ma-minibar__link" href="/projects/">Projects</a>
+                <button type="button" class="ma-minibar__theme" data-ma-theme-toggle aria-label="Toggle theme">◐</button>
+            </div>
+        </div>
+    </nav>
+    <script src="/js/legacy-minibar.js" defer></script>
+    <div class="bg" aria-hidden="true"></div>
+
+    <div class="wrap">
+        <header class="top">
+            <a class="brand" href="index.html">
+                <img src="img/icon.png" width="40" height="40" alt="">
+                BeatBob
+            </a>
+            <a class="ghost" href="privacy.html">Privacy</a>
+        </header>
+
+        <main>
+            <img
+                class="hero-art"
+                src="img/hero.png"
+                alt="BeatBob character nodding to music in a neon dance floor"
+                width="400"
+                height="711"
+            >
+
+            <div class="hero-copy">
+                <h1>Headbangs to your music</h1>
+                <p class="sub">Play a track nearby. Tap Listen. Watch Bob lock onto the beat.</p>
+            </div>
+
+            <a href="https://apps.apple.com/gb/app/beat-bob/id6794845376" class="cta" id="appStoreButton" rel="noopener noreferrer">Get it on the App Store</a>
+            <p class="cta-note">Free · iPhone only · iOS 17+</p>
+
+            <div class="cards">
+                <div class="card">
+                    <div class="emoji">🎵</div>
+                    <strong>Feel the beat</strong>
+                    <span>On-device tempo lock — Pop, Rock, Metal, EDM, Classical vibes.</span>
+                </div>
+                <div class="card">
+                    <div class="emoji">🎤</div>
+                    <strong>Mic only while Listen</strong>
+                    <span>Audio stays on your phone. No recordings saved.</span>
+                </div>
+                <div class="card">
+                    <div class="emoji">🎧</div>
+                    <strong>Shazam, if it clicks</strong>
+                    <span>Optional song ID can nudge the genre look. Needs iPhone + network.</span>
+                </div>
+            </div>
+
+            <section class="genres" aria-label="Genre styles">
+                <h2>Pick a vibe</h2>
+                <div class="genre-row">
+                    <div class="genre-chip">
+                        <img src="img/skin-pop.png" alt="Pop style character" width="72" height="98">
+                        <label>Pop</label>
+                    </div>
+                    <div class="genre-chip">
+                        <img src="img/skin-rock.png" alt="Rock style character" width="72" height="98">
+                        <label>Rock</label>
+                    </div>
+                    <div class="genre-chip">
+                        <img src="img/skin-metal.png" alt="Metal style character" width="72" height="98">
+                        <label>Metal</label>
+                    </div>
+                    <div class="genre-chip">
+                        <img src="img/skin-edm.png" alt="EDM style character" width="72" height="98">
+                        <label>EDM</label>
+                    </div>
+                    <div class="genre-chip">
+                        <img src="img/skin-classical.png" alt="Classical style character" width="72" height="98">
+                        <label>Classical</label>
+                    </div>
+                </div>
+                <p style="margin-top:12px;font-size:0.85rem;font-weight:600;color:var(--ink-soft);">
+                    Or import your own skin from a photo.
+                </p>
+            </section>
+
+            <section class="steps">
+                <h2>Three taps to bob</h2>
+                <div class="step-line">
+                    <span class="step"><em>1</em> Crank the speaker</span>
+                    <span class="step"><em>2</em> Tap Listen</span>
+                    <span class="step"><em>3</em> Bob goes brr</span>
+                </div>
+            </section>
+
+            <section class="support">
+                <p>Stuck? Weird bug? Cool idea?</p>
+                <p style="margin-top:8px;">
+                    <a href="mailto:blyabtroi@gmail.com?subject=BeatBob%20Support">blyabtroi@gmail.com</a>
+                </p>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2026 BeatBob</p>
+            <p style="margin-top:6px;">
+                <a href="privacy.html">Privacy Policy</a>
+            </p>
+        </footer>
+    </div>
+
+</body>
 </html>

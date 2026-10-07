@@ -1,0 +1,77 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { mkncContent } from '../i18n/mknc';
+import type { Locale } from '../i18n/ui';
+import { useTranslations } from '../i18n/ui';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const content = mkncContent[locale];
+const projectsUrl = getRelativeLocaleUrl(locale, '/projects/');
+---
+
+<PageLayout locale={locale} title={content.title} description={content.description}>
+	<article class="mknc-page">
+		<h1>{content.heading}</h1>
+		<p class="lead">{content.lead}</p>
+
+		{
+			content.sections.map((section) => (
+				<section>
+					<h2>{section.title}</h2>
+					{section.paragraphs?.map((text) => <p>{text}</p>)}
+					{section.list && (
+						<ul>
+							{section.list.map((item) => (
+								<li><strong>{item.term}</strong> — {item.detail}</li>
+							))}
+						</ul>
+					)}
+				</section>
+			))
+		}
+
+		<p class="disclaimer">{content.disclaimer}</p>
+
+		<p><a href={projectsUrl}>← {t('nav.projects')}</a></p>
+	</article>
+</PageLayout>
+
+<style>
+	.mknc-page {
+		max-width: var(--prose-max);
+	}
+
+	.lead {
+		color: var(--ink-soft);
+		font-size: 1.1rem;
+	}
+
+	section {
+		margin: 2rem 0;
+	}
+
+	ul {
+		padding-left: 1.25rem;
+		color: var(--ink-soft);
+	}
+
+	li {
+		margin-bottom: 0.5rem;
+	}
+
+	.disclaimer {
+		margin-top: 2.5rem;
+		padding: 1rem 1.25rem;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: var(--panel);
+		font-size: 0.92rem;
+		color: var(--ink-soft);
+	}
+</style>

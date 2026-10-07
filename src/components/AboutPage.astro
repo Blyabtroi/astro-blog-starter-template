@@ -10,17 +10,40 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const { paragraphs } = aboutContent[locale];
+const { paragraphs, highlightsTitle, highlights, closing } = aboutContent[locale];
 ---
 
 <PageLayout locale={locale} title={t('about.title')} description={t('about.description')}>
 	<h1>{t('about.title')}</h1>
 	{paragraphs.map((text) => <p>{text}</p>)}
+	<h2 class="highlights-title">{highlightsTitle}</h2>
+	<ul class="highlights">
+		{highlights.map((text) => <li>{text}</li>)}
+	</ul>
+	<p>{closing}</p>
 </PageLayout>
 
 <style>
 	h1 {
 		margin-top: 0;
+	}
+
+	.highlights-title {
+		margin: 2rem 0 0.75rem;
+		font-size: 1.1rem;
+		font-family: var(--font-display);
+	}
+
+	.highlights {
+		max-width: var(--prose-max);
+		padding-left: 1.25rem;
+		margin: 0 0 1.5rem;
+		color: var(--ink-soft);
+		line-height: 1.65;
+	}
+
+	.highlights li {
+		margin-bottom: 0.4rem;
 	}
 
 	p {

@@ -1,21 +1,39 @@
 import type { Locale } from "./ui";
 
-export const aboutContent: Record<
-	Locale,
-	{ paragraphs: string[] }
-> = {
+export type AboutContent = {
+	paragraphs: string[];
+	highlightsTitle: string;
+	highlights: string[];
+	closing: string;
+};
+
+export const aboutContent: Record<Locale, AboutContent> = {
 	ru: {
 		paragraphs: [
-			"Я Василий (Basil) Козлов — разработчик и автор проектов под брендом Mind Arts. Делаю веб-продукты, лендинги и инструменты, где важны ясность интерфейса и аккуратная инженерия.",
-			"На этом сайте — обзор проектов, статьи и ссылки на отдельные продукты. Исходники сайта открыты; обновления выкатываются через GitHub.",
-			"Связаться можно через GitHub или соцсети в подвале страницы.",
+			"Я Василий Козлов — разработчик и автор.",
+			"Мой основной бэкграунд — мобильная разработка и руководство командами. Работал в VK, Delivery Club и МТС. В сумме — больше 10 лет.",
 		],
+		highlightsTitle: "Три интересных факта из моего опыта:",
+		highlights: [
+			"Make VK Music great again.",
+			"Delivery Club в годы ковида.",
+			"Команды, в которых хочется работать.",
+		],
+		closing:
+			"На этом сайте — обзор проектов, статьи и ссылки на отдельные продукты. Связаться можно через LinkedIn в шапке или подвале.",
 	},
 	en: {
 		paragraphs: [
-			"I'm Vasiliy (Basil) Kozlov — a developer and maker behind Mind Arts. I build web products, landing pages, and tools where clear UX and solid engineering matter.",
-			"This site is a hub for project overviews, articles, and links to standalone products. The site source is in git; updates ship via GitHub.",
-			"Reach out via GitHub or the social links in the footer.",
+			"I'm Vasiliy (Basil) Kozlov — a developer and maker.",
+			"My core background is mobile development and engineering leadership. I've worked at VK, Delivery Club, and MTS — over 10 years in total.",
 		],
+		highlightsTitle: "Three facts from my experience:",
+		highlights: [
+			"Make VK Music great again.",
+			"Delivery Club during the COVID years.",
+			"Teams worth working.",
+		],
+		closing:
+			"This site collects project overviews, articles, and links to standalone products. Reach out via LinkedIn in the header or footer, or Twitter in the footer.",
 	},
 };

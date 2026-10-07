@@ -16,8 +16,16 @@ const today = new Date();
 		&copy; {today.getFullYear()} Vasiliy (Basil) Kozlov. {t('footer.rights')}
 	</p>
 	<div class="site-footer__links">
-		<a href="https://twitter.com/blyabtroi" target="_blank" rel="noopener noreferrer">Twitter</a>
-		<a href="https://github.com/blyabtroi" target="_blank" rel="noopener noreferrer">GitHub</a>
+		{
+			locale === 'en' && (
+				<a href="https://twitter.com/blyabtroi" target="_blank" rel="noopener noreferrer">Twitter</a>
+			)
+		}
+		<a
+			href="https://www.linkedin.com/in/vasiliy-kozlov"
+			target="_blank"
+			rel="noopener noreferrer">LinkedIn</a
+		>
 	</div>
 </footer>
 

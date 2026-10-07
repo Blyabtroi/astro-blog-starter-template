@@ -1,25 +1,411 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Тарифометр — Mind Arts</title>
-		<style>
-			body {
-				font-family: system-ui, sans-serif;
-				max-width: 40rem;
-				margin: 3rem auto;
-				padding: 0 1rem;
-				line-height: 1.5;
-			}
-		</style>
-	</head>
-	<body>
-		<h1>Тарифометр</h1>
-		<p>
-			Заглушка лендинга. Замените содержимое папки <code>public/tarifmometr/</code> на полные
-			исходники с текущего хостинга.
-		</p>
-		<p><a href="/">← Mind Arts</a></p>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Tarifmometr — мониторинг цен на такси</title>
+    <meta name="description" content="Tarifmometr — Telegram-бот, который следит за стоимостью поездки на выбранном маршруте и сообщит, когда цена снизится. Экономь на такси с умом.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            line-height: 1.5;
+        }
+
+        /* Основной цветовой акцент: RGB(245, 197, 68) -> #f5c544 */
+        :root {
+            --tarif-gold: #f5c544;
+            --tarif-gold-rgb: 245, 197, 68;
+            --tarif-dark: #0b2b26;
+            --tarif-deep: #1e4a3b;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ffbb00 0%, #ffbb00 100%);
+            color: white;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-img {
+            width: 260px;
+            height: 260px;
+            object-fit: contain;
+            background: rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 12px;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .subhead {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            background: #ffecb7;
+            color: #0b2b26;
+            padding: 0.9rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            margin-top: 2rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 20px rgba(245, 197, 68, 0.35);
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            background: #e6b12e;
+            transform: scale(1.02);
+            box-shadow: 0 10px 24px rgba(245, 197, 68, 0.45);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.8rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: #0b2b26;
+        }
+
+        .screenshots {
+            background: #f1f5f9;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .screenshots h2 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .screenshot-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .mockup {
+            background: #e2e8f0;
+            border-radius: 32px;
+            width: 220px;
+            height: 440px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .mockup img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .commands-panel {
+            background: #0f172a;
+            border-radius: 32px;
+            padding: 2rem;
+            margin: 2rem 0;
+            color: #e2e8f0;
+        }
+
+        .commands-panel h3 {
+            color: #f5c544;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .cmd-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.2rem;
+        }
+
+        .cmd-badge {
+            background: #1e293b;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border: 1px solid #334155;
+            transition: all 0.1s ease;
+        }
+
+        .cmd-badge:hover {
+            border-color: #f5c544;
+            color: #f5c544;
+        }
+
+        .faq {
+            padding: 3rem 0;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 20px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            transition: border 0.2s;
+        }
+
+        .faq-item:hover {
+            border-left: 4px solid #f5c544;
+        }
+
+        .faq-question {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
+            color: #0b2b26;
+        }
+
+        .footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: #f5c544;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            border-bottom: 1px dotted #f5c544;
+        }
+
+        .footer a:hover {
+            color: white;
+            border-bottom-color: white;
+        }
+
+        .help-text {
+            background: #fef9e3;
+            border-left: 5px solid #f5c544;
+            padding: 1.2rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            font-family: monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #1e293b;
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .subhead {
+                font-size: 1rem;
+            }
+            .feature-card {
+                padding: 1.2rem;
+            }
+            .mockup {
+                width: 180px;
+                height: 360px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/styles/legacy-minibar.css">
+</head>
+<body>
+    <nav class="ma-minibar" data-ma-minibar aria-label="Mind Arts">
+        <div class="ma-minibar__inner">
+            <a class="ma-minibar__brand" href="/">Mind Arts</a>
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <a class="ma-minibar__link" href="/projects/">Все проекты</a>
+                <button type="button" class="ma-minibar__theme" data-ma-theme-toggle aria-label="Переключить тему">◐</button>
+            </div>
+        </div>
+    </nav>
+    <script src="/js/legacy-minibar.js" defer></script>
+    <div class="header">
+        <div class="container">
+            <!-- иконка приложения tarifmometrw.png (предполагается, что файл рядом) -->
+            <img src="tarifmometrw.webp" alt="Tarifmometr Logo" class="logo-img" width="260" height="260">
+            <h1>Tarifmometr</h1>
+            <div class="subhead">Следите за ценой на такси в реальном времени. Бот сообщит, когда стоимость поездки снизится. Экономь на каждом маршруте.</div>
+            <a href="https://t.me/tarifmometr_bot" target="_blank" class="download-btn" id="telegramButton">
+                📱 Открыть в Telegram
+            </a>
+            <a href="https://apps.apple.com/tj/app/tarifmometr/id6761688041" class="download-btn" id="appStoreButton" rel="noopener noreferrer">⬇️ Загрузить в App Store</a>
+            <div style="margin-top: 1rem; font-size: 0.85rem; opacity: 0.7;">Бесплатно · Без регистрации · Мгновенный мониторинг</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Маршрут за секунды</h3>
+                <p>Задайте адрес подачи и назначения командами <strong>/from</strong> и <strong>/to</strong>. Бот запомнит маршрут и начнёт отслеживать цены Яндекс Go.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📉</div>
+                <h3>Умное снижение цены</h3>
+                <p>Как только тариф упадёт — бот пришлет уведомление и ссылку для заказа. Не нужно обновлять вручную.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Смена тарифа / пауза</h3>
+                <p>Выберите класс (Комфорт+, Эконом, Бизнес) через <strong>/tarif</strong>. Поставьте мониторинг на паузу командой <strong>/break</strong>.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Быстрый заказ</h3>
+                <p>После снижения цены бот пришлёт прямую ссылку на Яндекс Go. Приложение откроется — останется подтвердить поездку.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок с полной справкой из бота -->
+    <div class="container">
+        <div class="help-text">
+            <strong>🤖 Добро пожаловать в Tarifmometr Бот!</strong><br><br>
+            Команды:<br>
+            <strong>/from</strong> или 📍 — адрес подачи,<br>
+            <strong>/to</strong> или 🎯 — адрес назначения,<br>
+            <strong>/switch</strong> — поменять адреса местами,<br>
+            <strong>/tarif</strong> — указать тариф Яндекс Go,<br>
+            <strong>/break</strong> или ✋ — остановить поиск,<br>
+            <strong>/go</strong> или 🏁 — выполните за ~20 мин перед поездкой.<br><br>
+            Бот сообщит, если стоимость 📉 снизится и пришлет ссылку для заказа такси.<br>
+            🚀 Переходите по ссылке, чтоб сделать заказ в Яндекс Go (приложение должно быть установлено).<br><br>
+            👋 Бот не связан с Яндекс, просто использует доступные сервисы.
+        </div>
+    </div>
+
+    <!-- Скриншоты из бота (имитация реальных диалогов) -->
+    <div class="screenshots">
+        <div class="container">
+            <h2>Как работает мониторинг</h2>
+            <div class="screenshot-grid">
+                <div class="mockup">
+                    <img src="img.webp" alt="Скриншот бота: маршрут и цена" loading="lazy">
+                </div>
+                <div class="mockup">
+                    <img src="img2.webp" alt="Скриншот: снижение цены и ссылка" loading="lazy">
+                </div>
+            </div>
+            <p style="margin-top: 1.8rem; color: #475569;">Вы задаёте маршрут и тариф — бот отслеживает динамику. Как только цена падает до комфортного уровня, получаете ссылку на Яндекс Go.</p>
+        </div>
+    </div>
+
+    <!-- Пример реального интерфейса команд -->
+    <div class="container">
+        <div class="commands-panel">
+            <h3>⚡️ Управление одной строкой</h3>
+            <p>Просто отправьте команду боту — и мониторинг активирован. Все настройки сохраняются.</p>
+            <div class="cmd-grid">
+                <span class="cmd-badge">/from</span>
+                <span class="cmd-badge">/to</span>
+                <span class="cmd-badge">/tarif</span>
+                <span class="cmd-badge">/switch</span>
+                <span class="cmd-badge">/break</span>
+                <span class="cmd-badge">/go</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container faq">
+        <h2 style="margin-bottom: 1.5rem; color: #0b2b26;">Частые вопросы</h2>
+        <div class="faq-item">
+            <div class="faq-question">❓ Нужно ли платить за использование бота?</div>
+            <div>Нет.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🚕 Как бот узнаёт цены Яндекс Go?</div>
+            <div>Бот использует открытые данные и API-агрегаторы и не хранит персональные данные.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">📉 Что значит «сообщу, если стоимость снизится»?</div>
+            <div>Бот периодически проверяет цену на ваш маршрут и сравнивает с предыдущим значением. Если тариф упал (например, с 900 до 600 руб., что не часто бывает), вы получите уведомление с готовой ссылкой для заказа такси.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🔄 Можно ли сменить маршрут после запуска мониторинга?</div>
+            <div>Да. Отмените мониторинг командой /break. Используйте /from и /to повторно, либо команду /switch, чтобы поменять адреса местами.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🆘 Как связаться с поддержкой?</div>
+            <div>Пишите на почту: <strong>blyabtroi@gmail.com</strong>.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🔐 Безопасно ли переходить по ссылкам из бота?</div>
+            <div>Бот отправляет только официальные ссылки Яндекса. Приложение Яндекс Go (должно быть установлено) откроется на экране подтверждения — вы сами решаете, заказывать или нет.</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>© 2026 Tarifmometr · Экономные поездки</p>
+            <p style="margin-top: 0.5rem;">
+                <a href="privacy.html">Политика конфиденциальности</a> 
+                <a href="https://t.me/tarifmometr_bot">Telegram-бот</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.75rem;">Сервис не аффилирован с Яндекс Go, информация о ценах предоставляется в ознакомительных целях.</p>
+        </div>
+    </div>
+
+</body>
 </html>

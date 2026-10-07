@@ -11,7 +11,7 @@ interface Props {
 
 const { project, locale } = Astro.props;
 const t = useTranslations(locale);
-const href = projectHref(project);
+const href = projectHref(project, locale);
 const isExternal = Boolean(project.externalUrl);
 ---
 

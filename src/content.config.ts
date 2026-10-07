@@ -12,6 +12,7 @@ const blog = defineCollection({
 		heroImage: z.string().optional(),
 		locale: z.enum(["ru", "en"]),
 		translationSlug: z.string().optional(),
+		originalUrl: z.string().url().optional(),
 	}),
 });
 

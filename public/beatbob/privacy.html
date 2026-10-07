@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy — BeatBob</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --pink: #f2738c;
+            --pink-hot: #f24d6f;
+            --mist: #edf5f9;
+            --ink: #1e2a38;
+            --ink-soft: #5a6b7d;
+        }
+
+        body {
+            font-family: "Nunito", -apple-system, sans-serif;
+            background: var(--mist);
+            color: var(--ink);
+            line-height: 1.6;
+            padding: 24px 16px 48px;
+        }
+
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(145deg, #edf5f9 0%, rgba(242, 115, 140, 0.12) 50%, rgba(168, 212, 232, 0.4) 100%);
+        }
+
+        .wrap {
+            max-width: 640px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 28px 24px 32px;
+            box-shadow: 0 16px 40px rgba(30, 42, 56, 0.08);
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: var(--pink-hot);
+            text-decoration: none;
+        }
+
+        .back:hover { text-decoration: underline; }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .date {
+            margin-top: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+        }
+
+        h2 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin: 28px 0 10px;
+            color: var(--ink);
+        }
+
+        p, li {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+        }
+
+        ul { padding-left: 1.25rem; }
+
+        a { color: var(--pink-hot); font-weight: 700; }
+
+        .contact {
+            margin-top: 24px;
+            padding: 16px 18px;
+            border-radius: 16px;
+            background: rgba(242, 115, 140, 0.1);
+            border: 1px solid rgba(242, 115, 140, 0.25);
+        }
+
+        .contact strong { color: var(--ink); }
+    </style>
+    <link rel="stylesheet" href="/styles/legacy-minibar.css">
+</head>
+<body>
+    <nav class="ma-minibar" data-ma-minibar aria-label="Mind Arts">
+        <div class="ma-minibar__inner">
+            <a class="ma-minibar__brand" href="/">Mind Arts</a>
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <a class="ma-minibar__link" href="/projects/">Projects</a>
+                <button type="button" class="ma-minibar__theme" data-ma-theme-toggle aria-label="Toggle theme">◐</button>
+            </div>
+        </div>
+    </nav>
+    <script src="/js/legacy-minibar.js" defer></script>
+    <div class="bg" aria-hidden="true"></div>
+    <div class="wrap">
+        <a href="index.html" class="back">← Back to BeatBob</a>
+
+        <h1>Privacy Policy</h1>
+        <p class="date">Last updated: August 9, 2026</p>
+
+        <p style="margin-top:16px;color:var(--ink);">
+            BeatBob is a music sidekick: your character nods to nearby music heard through the mic.
+            Here's the short version before the details.
+        </p>
+
+        <h2>The short version</h2>
+        <ul>
+            <li>Mic is on <strong>only while Listen is active</strong>. We don't save recordings.</li>
+            <li>Beat detection runs <strong>on your iPhone</strong>.</li>
+            <li>Shazam (optional) may send audio signatures to <strong>Apple</strong> to ID a track.</li>
+            <li>The app is free and shows <strong>Yandex ads</strong>. Ad partners may collect device/ad data.</li>
+            <li>We don't do cross-app tracking.</li>
+        </ul>
+
+        <h2>Microphone</h2>
+        <p>
+            When you tap Listen, BeatBob uses the mic to hear music in the room and drive the character.
+            Processing is live on-device. Raw audio isn't stored or uploaded by BeatBob.
+        </p>
+
+        <h2>ShazamKit</h2>
+        <p>
+            On a real iPhone with network, the app may use Apple ShazamKit to recognize a song and hint a genre.
+            See <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's privacy policy</a>.
+        </p>
+
+        <h2>Custom skins</h2>
+        <p>
+            Photos or PNGs you import for skins are processed on-device and stored locally in the app's sandbox.
+        </p>
+
+        <h2>Ads & analytics</h2>
+        <p>
+            Yandex Mobile Ads may collect device identifiers and advertising data for ad delivery and SDK analytics.
+            Not linked to your identity in BeatBob, not used for tracking by us.
+            <a href="https://yandex.com/legal/confidential/" target="_blank" rel="noopener">Yandex privacy</a>
+        </p>
+
+        <h2>What we don't collect</h2>
+        <ul>
+            <li>Accounts or logins</li>
+            <li>Location, contacts, health data</li>
+            <li>Cross-app tracking on our side</li>
+        </ul>
+
+        <h2>Kids</h2>
+        <p>Not aimed at children under 13.</p>
+
+        <h2>Your controls</h2>
+        <ul>
+            <li>Mic: Settings → BeatBob → Microphone</li>
+            <li>Ads tracking: iOS Privacy & Security → Tracking</li>
+        </ul>
+
+        <div class="contact">
+            <p><strong>Questions?</strong></p>
+            <p><a href="mailto:blyabtroi@gmail.com">blyabtroi@gmail.com</a></p>
+        </div>
+    </div>
+</body>
+</html>

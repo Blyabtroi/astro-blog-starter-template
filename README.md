@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:4321](http://localhost:4321).
+Open [http://localhost:4321](http://localhost:4321). Legacy landings (`/beatbob/`, `/kinonaoborot/`, `/tarifmometr/`) use `public/*/index.html`; the dev server rewrites trailing-slash URLs (see `astro.config.mjs`). Restart `npm run dev` after config changes; if the port is busy, stop old Astro processes so you are not hitting a stale server on another port.
 
 ## Build
 
@@ -22,17 +22,19 @@ Output is in `dist/`.
 
 ## Project landings (legacy static)
 
-Full HTML/CSS/JS for Beatbob, Kinonaoborot, and Tarifmometr live under:
+Full HTML/CSS/JS for Beatbob (EN), Kinonaoborot, and Tarifmometr live under `public/beatbob/`, `public/kinonaoborot/`, and `public/tarifmometr/`. Shared sticky minibar: `public/styles/legacy-minibar.css` and `public/js/legacy-minibar.js` (site theme on the bar only; each landing keeps its own page styling).
 
-- `public/beatbob/`
-- `public/kinonaoborot/`
-- `public/tarifmometr/`
+MKNC is an Astro page at `src/pages/mknc/index.astro` → `/mknc/`.
 
-They are copied as-is into `dist/` on build. Replace the placeholder `index.html` files with your production assets from reg.ru.
+**app-ads.txt:** Kinonaoborot lines are in `public/app-ads.kinonaoborot.txt`. Merge into the site root `app-ads.txt` on the host when you maintain that file manually.
+
+Landings are one-time copies into this repo (not synced from product repos). After image changes in Tarifmometr assets, you can convert PNGs to WebP locally with `npx sharp-cli` or a one-off `sharp` script; WebP is not required for deploy.
 
 ## Blog
 
 Posts are Markdown under `src/content/blog/ru/` and `src/content/blog/en/`. Frontmatter includes `locale` and optional `translationSlug`.
+
+Habr republications: full text in `src/content/blog/ru/habr-*.md`, images under `public/blog/habr/<id>/`. Re-fetch from Habr with `npm install --no-save turndown turndown-plugin-gfm && node scripts/habr-to-markdown.mjs`.
 
 ## Deploy (GitHub Actions → FTP)
 
