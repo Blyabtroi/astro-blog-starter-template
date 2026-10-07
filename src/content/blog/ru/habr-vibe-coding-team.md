@@ -3,6 +3,7 @@ title: 'Vibe coding — это не только про AI. Это про к
 description: 'Vibe coding как инженерная среда: безопасность, ясность, code review и роль руководителя.'
 pubDate: 2025-09-17
 locale: ru
+translationSlug: habr-vibe-coding-team
 originalUrl: https://habr.com/ru/articles/1083242/
 ---
 

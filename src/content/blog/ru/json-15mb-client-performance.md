@@ -3,6 +3,7 @@ title: 'Производительность и нагрузка на клиен
 description: 'Как мы ускорили разбор огромных ответов на iOS: бенчмарки библиотек, yyjson, горячий путь и предсказуемые ветки.'
 pubDate: 2026-03-18
 locale: ru
+translationSlug: json-15mb-client-performance
 ---
 
 ## Проблема

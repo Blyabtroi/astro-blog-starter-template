@@ -3,6 +3,7 @@ title: 'Сценарий идеального технического собе�
 description: 'Как устроить техническое интервью в Delivery Club Tech: формат, HR, интервьюер и сценарий в пяти действиях.'
 pubDate: 2020-10-07
 locale: ru
+translationSlug: habr-ideal-tech-interview
 originalUrl: https://habr.com/ru/companies/deliveryclub/articles/522326/
 ---
 
