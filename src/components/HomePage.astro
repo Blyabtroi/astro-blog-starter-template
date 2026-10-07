@@ -58,36 +58,52 @@ const blogUrl = getRelativeLocaleUrl(locale, '/blog');
 </PageLayout>
 
 <style>
+	section {
+		margin-bottom: 2.5rem;
+	}
+
 	.hero h1 {
 		margin-top: 0;
 	}
+
 	.lead {
 		font-size: 1.15rem;
-		color: rgb(var(--gray-dark));
+		color: var(--ink-soft);
 		max-width: 42rem;
+		line-height: 1.6;
 	}
+
 	.grid {
 		display: grid;
 		gap: 1rem;
 		grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+		margin: 1rem 0;
 	}
+
 	.posts {
 		list-style: none;
 		padding: 0;
+		margin: 1rem 0;
 	}
+
 	.posts li {
 		margin-bottom: 0.75rem;
+		padding-bottom: 0.75rem;
+		border-bottom: 1px solid var(--line);
 	}
+
 	.posts a {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.5rem 1rem;
 		text-decoration: none;
-		color: rgb(var(--black));
+		color: var(--ink);
 	}
+
 	.posts a:hover .post-title {
 		color: var(--accent);
 	}
+
 	.post-title {
 		font-weight: 600;
 	}

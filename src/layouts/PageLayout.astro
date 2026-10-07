@@ -15,24 +15,30 @@ const { locale, title, description, image } = Astro.props;
 ---
 
 <!doctype html>
-<html lang={locale}>
+<html lang={locale} data-theme="day">
 	<head>
+		<script is:inline>
+			(function () {
+				var key = 'mindarts-theme';
+				var stored = localStorage.getItem(key);
+				var theme =
+					stored === 'day' || stored === 'night'
+						? stored
+						: window.matchMedia('(prefers-color-scheme: dark)').matches
+							? 'night'
+							: 'day';
+				document.documentElement.dataset.theme = theme;
+			})();
+		</script>
 		<BaseHead title={title} description={description} image={image} locale={locale} />
 		<slot name="head" />
 	</head>
-	<body>
+	<body class="site-shell">
+		<a class="skip-link" href="#main-content">{locale === 'ru' ? 'К содержанию' : 'Skip to content'}</a>
 		<Header locale={locale} />
-		<main>
+		<main id="main-content">
 			<slot />
 		</main>
 		<Footer locale={locale} />
 	</body>
 </html>
-
-<style is:global>
-	main {
-		width: min(960px, calc(100% - 2em));
-		margin: 0 auto;
-		padding: 1.5em 0 3em;
-	}
-</style>

@@ -16,17 +16,29 @@ const isExternal = Boolean(project.externalUrl);
 ---
 
 <article class="project-card">
-	<h3><a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>{project.title[locale]}</a></h3>
+	<h3>
+		<a
+			href={href}
+			target={isExternal ? '_blank' : undefined}
+			rel={isExternal ? 'noopener noreferrer' : undefined}>{project.title[locale]}</a
+		>
+	</h3>
 	<p>{project.description[locale]}</p>
-	{project.tags.length > 0 && (
-		<ul class="tags">
-			{project.tags.map((tag) => (
-				<li>{tag}</li>
-			))}
-		</ul>
-	)}
+	{
+		project.tags.length > 0 && (
+			<ul class="tags">
+				{project.tags.map((tag) => (
+					<li>{tag}</li>
+				))}
+			</ul>
+		)
+	}
 	<p class="cta">
-		<a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>
+		<a
+			href={href}
+			target={isExternal ? '_blank' : undefined}
+			rel={isExternal ? 'noopener noreferrer' : undefined}
+		>
 			{isExternal ? t('projects.external') : t('projects.open')} →
 		</a>
 	</p>
@@ -34,26 +46,40 @@ const isExternal = Boolean(project.externalUrl);
 
 <style>
 	.project-card {
-		border: 1px solid rgb(var(--gray-light));
+		border: 1px solid var(--line);
 		border-radius: 12px;
-		padding: 1.25rem;
-		background: white;
-		box-shadow: var(--box-shadow);
+		padding: 1.25rem 1.35rem;
+		background: var(--panel);
+		transition:
+			box-shadow 0.2s ease,
+			border-color 0.2s ease;
 	}
-	h3 {
+
+	.project-card:hover {
+		box-shadow: var(--lift);
+		border-color: color-mix(in oklab, var(--accent) 35%, var(--line));
+	}
+
+	.project-card h3 {
 		margin: 0 0 0.5rem;
+		font-size: 1.15rem;
 	}
-	h3 a {
-		color: rgb(var(--black));
+
+	.project-card h3 a {
+		color: var(--ink);
 		text-decoration: none;
 	}
-	h3 a:hover {
+
+	.project-card h3 a:hover {
 		color: var(--accent);
 	}
-	p {
+
+	.project-card p {
 		margin: 0.5rem 0;
-		color: rgb(var(--gray-dark));
+		color: var(--ink-soft);
+		font-size: 0.98rem;
 	}
+
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
@@ -61,13 +87,20 @@ const isExternal = Boolean(project.externalUrl);
 		list-style: none;
 		padding: 0;
 		margin: 0.75rem 0 0;
-		font-size: 0.85em;
-		color: rgb(var(--gray));
+		font-size: 0.8rem;
+		color: var(--ink-soft);
 	}
+
 	.cta {
 		margin-top: 1rem;
 	}
+
 	.cta a {
 		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.cta a:hover {
+		text-decoration: underline;
 	}
 </style>

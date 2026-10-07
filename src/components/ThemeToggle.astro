@@ -1,0 +1,102 @@
+---
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dayLabel = locale === 'ru' ? 'Включить ночную тему' : 'Enable night theme';
+const nightLabel = locale === 'ru' ? 'Включить дневную тему' : 'Enable day theme';
+---
+
+<button
+	type="button"
+	class="theme-toggle"
+	data-theme-control
+	aria-pressed="false"
+	aria-label={dayLabel}
+	data-day-label={dayLabel}
+	data-night-label={nightLabel}
+>
+	<svg class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+		<path
+			d="M12 21a9 9 0 0 1-.5-17.986V3c-.354.966-.5 1.911-.5 3a9 9 0 0 0 9 9c.239 0 .254.018.488 0A9.004 9.004 0 0 1 12 21Z"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"></path>
+	</svg>
+	<svg class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+		<path
+			d="M12 5V3m0 18v-2M7.05 7.05 5.636 5.636m12.728 12.728L16.95 16.95M5 12H3m18 0h-2M7.05 16.95l-1.414 1.414M18.364 5.636 16.95 7.05M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"></path>
+	</svg>
+</button>
+
+<script>
+	const STORAGE_KEY = 'mindarts-theme';
+
+	function applyTheme(theme: 'day' | 'night') {
+		document.documentElement.dataset.theme = theme;
+		document.querySelectorAll<HTMLButtonElement>('[data-theme-control]').forEach((btn) => {
+			const isNight = theme === 'night';
+			btn.setAttribute('aria-pressed', String(isNight));
+			btn.setAttribute('aria-label', isNight ? btn.dataset.nightLabel! : btn.dataset.dayLabel!);
+		});
+	}
+
+	function initThemeControls() {
+		document.querySelectorAll<HTMLButtonElement>('[data-theme-control]').forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const next = document.documentElement.dataset.theme === 'night' ? 'day' : 'night';
+				localStorage.setItem(STORAGE_KEY, next);
+				applyTheme(next);
+			});
+		});
+	}
+
+	initThemeControls();
+	document.addEventListener('astro:page-load', initThemeControls);
+</script>
+
+<style>
+	.theme-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		padding: 0;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: transparent;
+		color: var(--ink);
+		cursor: pointer;
+	}
+
+	.theme-toggle:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+
+	.theme-toggle__icon {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	.theme-toggle__icon--sun {
+		display: none;
+	}
+
+	:global([data-theme='night']) .theme-toggle__icon--moon {
+		display: none;
+	}
+
+	:global([data-theme='night']) .theme-toggle__icon--sun {
+		display: block;
+	}
+</style>

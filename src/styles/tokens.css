@@ -1,0 +1,31 @@
+:root {
+	color-scheme: light;
+
+	--font-display: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+	--font-body: "Source Sans 3", "Source Sans Pro", system-ui, sans-serif;
+	--font-mono: "IBM Plex Mono", "SF Mono", Consolas, monospace;
+
+	--bg: #f9f7f7;
+	--ink: #2d2624;
+	--accent: #c13832;
+	--accent-fill: #e85850;
+	--on-accent: #1e1a19;
+
+	--panel: color-mix(in oklab, var(--ink) 6%, var(--bg));
+	--line: color-mix(in oklab, var(--ink) 17%, var(--bg));
+	--ink-soft: color-mix(in oklab, var(--ink) 62%, var(--bg));
+	--lift: 0 2px 10px color-mix(in oklab, var(--ink) 14%, transparent);
+
+	--content-max: 60rem;
+	--prose-max: 45rem;
+}
+
+[data-theme="night"] {
+	color-scheme: dark;
+
+	--bg: #22201f;
+	--ink: #f0efee;
+	--accent: #f47967;
+	--accent-fill: #e85850;
+	--on-accent: #1e1a19;
+}

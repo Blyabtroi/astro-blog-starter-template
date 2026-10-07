@@ -11,31 +11,43 @@ const t = useTranslations(locale);
 const today = new Date();
 ---
 
-<footer>
-	&copy; {today.getFullYear()} Vasiliy (Basil) Kozlov. {t('footer.rights')}
-	<div class="social-links">
+<footer class="site-footer">
+	<p class="site-footer__copy">
+		&copy; {today.getFullYear()} Vasiliy (Basil) Kozlov. {t('footer.rights')}
+	</p>
+	<div class="site-footer__links">
 		<a href="https://twitter.com/blyabtroi" target="_blank" rel="noopener noreferrer">Twitter</a>
 		<a href="https://github.com/blyabtroi" target="_blank" rel="noopener noreferrer">GitHub</a>
 	</div>
 </footer>
+
 <style>
-	footer {
-		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
+	.site-footer {
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: 2rem 1rem 4rem;
 		text-align: center;
+		color: var(--ink-soft);
+		font-size: 0.95rem;
+		border-top: 1px solid var(--line);
 	}
-	.social-links {
+
+	.site-footer__copy {
+		margin: 0 0 0.75rem;
+	}
+
+	.site-footer__links {
 		display: flex;
 		justify-content: center;
-		gap: 1em;
-		margin-top: 1em;
+		gap: 1.25rem;
 	}
-	.social-links a {
+
+	.site-footer__links a {
+		color: var(--ink-soft);
 		text-decoration: none;
-		color: rgb(var(--gray));
 	}
-	.social-links a:hover {
-		color: rgb(var(--gray-dark));
+
+	.site-footer__links a:hover {
+		color: var(--accent);
 	}
 </style>

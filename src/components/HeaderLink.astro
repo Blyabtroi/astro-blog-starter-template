@@ -17,6 +17,27 @@ const isActive =
 	(hrefStr !== '/' && pathname.startsWith(hrefStr.endsWith('/') ? hrefStr : `${hrefStr}/`));
 ---
 
-<a href={href} class:list={[className, { active: isActive }]} {...props}>
+<a href={href} class:list={['nav-link', className, { active: isActive }]} {...props}>
 	<slot />
 </a>
+
+<style>
+	.nav-link {
+		display: inline-block;
+		padding: 0.35rem 0.5rem;
+		font-size: 0.95rem;
+		text-decoration: none;
+		color: var(--ink-soft);
+		border-radius: 6px;
+	}
+
+	.nav-link:hover {
+		color: var(--accent);
+		background: var(--panel);
+	}
+
+	.nav-link.active {
+		color: var(--accent);
+		font-weight: 600;
+	}
+</style>

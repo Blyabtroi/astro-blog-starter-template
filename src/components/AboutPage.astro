@@ -19,9 +19,13 @@ const { paragraphs } = aboutContent[locale];
 </PageLayout>
 
 <style>
+	h1 {
+		margin-top: 0;
+	}
+
 	p {
-		max-width: 42rem;
+		max-width: var(--prose-max);
 		line-height: 1.65;
-		color: rgb(var(--gray-dark));
+		color: var(--ink-soft);
 	}
 </style>
