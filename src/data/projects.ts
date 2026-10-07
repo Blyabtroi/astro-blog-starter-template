@@ -62,20 +62,54 @@ export const projects: Project[] = [
 	},
 	{
 		slug: "konek",
-		externalUrl: "https://konek.mind-arts.ru",
+		externalUrl: "https://apps.apple.com/tj/app/konek/id6810789188",
 		featured: true,
 		order: 5,
 		title: { ru: "Konek", en: "Konek" },
 		description: {
-			ru: "Отдельный продукт на поддомене konek.mind-arts.ru.",
-			en: "Standalone product at konek.mind-arts.ru.",
+			ru:
+				"Головоломка на ход шахматного коня: заполнить поле без тупиков. Режимы — уровни, два игрока на одном устройстве и игра против ИИ.",
+			en:
+				"Knight's tour puzzle: cover every playable square without getting stuck. Puzzle levels, local two-player, and vs AI.",
 		},
-		tags: ["product"],
+		tags: ["iOS", "puzzle", "game"],
+	},
+	{
+		slug: "magnetology",
+		externalUrl: "https://apps.apple.com/tj/app/magnetology/id789651124",
+		featured: true,
+		order: 6,
+		title: { ru: "Magnetology", en: "Magnetology" },
+		description: {
+			ru:
+				"iOS: прогноз геомагнитных бурь и индекс Kp (данные NOAA) — чтобы заранее учитывать самочувствие и нагрузку.",
+			en:
+				"iOS app: geomagnetic storm forecast and Kp index (NOAA data) — plan around storms and how you feel.",
+		},
+		tags: ["iOS", "weather"],
+	},
+	{
+		slug: "padla-picasso",
+		externalUrl: "https://padlapicasso.ru",
+		featured: true,
+		order: 7,
+		title: { ru: "Padla Picasso", en: "Padla Picasso" },
+		description: {
+			ru:
+				"Словесный батл с AI-персонажами: ищи слабости, обходи красную линию и выноси противника за минимум реплик.",
+			en:
+				"Word battle with AI characters: spot weaknesses, stay off the red line, and win in as few replies as you can.",
+		},
+		tags: ["Telegram", "AI", "game"],
 	},
 ];
 
 export function sortedProjects() {
 	return [...projects].sort((a, b) => a.order - b.order);
+}
+
+export function isAppStoreUrl(url: string): boolean {
+	return url.includes("apps.apple.com/");
 }
 
 export function projectHref(project: Project, locale: Locale = "ru"): string {
