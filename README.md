@@ -36,6 +36,8 @@ Posts are Markdown under `src/content/blog/ru/` and `src/content/blog/en/`. Fron
 
 Habr republications: full text in `src/content/blog/ru/habr-*.md`, images under `public/blog/habr/<id>/`. Re-fetch from Habr with `npm install --no-save turndown turndown-plugin-gfm && node scripts/habr-to-markdown.mjs`.
 
+Tokenization comparison (RU/EN blog post): sample texts and `tokcmp.py` live in [`tokcmp/`](tokcmp/).
+
 ## Deploy (GitHub Actions → FTP)
 
 On push to `main`, [.github/workflows/deploy.yml](.github/workflows/deploy.yml) runs `npm run build` and uploads `dist/` via FTP.
