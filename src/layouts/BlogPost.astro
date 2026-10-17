@@ -1,5 +1,6 @@
 ---
 import PageLayout from './PageLayout.astro';
+import BlogMermaid from '../components/BlogMermaid.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import type { Locale } from '../i18n/ui';
 import { useTranslations } from '../i18n/ui';
@@ -42,6 +43,7 @@ const t = useTranslations(locale);
 			<slot />
 		</div>
 	</article>
+	<BlogMermaid />
 </PageLayout>
 
 <style>
@@ -80,5 +82,20 @@ const t = useTranslations(locale);
 	.last-updated-on {
 		font-style: italic;
 		margin-top: 0.25rem;
+	}
+
+	.prose :global(.mermaid-diagram) {
+		margin: 1.5rem 0;
+		padding: 1rem;
+		overflow-x: auto;
+		border-radius: 8px;
+		border: 1px solid var(--line);
+		background: var(--panel);
+	}
+
+	.prose :global(.mermaid-diagram svg) {
+		display: block;
+		margin: 0 auto;
+		max-width: 100%;
 	}
 </style>

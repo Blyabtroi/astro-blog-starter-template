@@ -1,0 +1,45 @@
+---
+---
+
+<script>
+	function mermaidTheme(): 'dark' | 'neutral' {
+		return document.documentElement.dataset.theme === 'night' ? 'dark' : 'neutral';
+	}
+
+	async function renderMermaidInArticle() {
+		const blocks = document.querySelectorAll<HTMLPreElement>(
+			'.blog-article pre[data-language="mermaid"]',
+		);
+		if (blocks.length === 0) return;
+
+		const mermaid = (await import('mermaid')).default;
+
+		mermaid.initialize({
+			startOnLoad: false,
+			theme: mermaidTheme(),
+			securityLevel: 'strict',
+			flowchart: { useMaxWidth: true },
+		});
+
+		const nodes: HTMLElement[] = [];
+		for (const pre of blocks) {
+			const source = pre.querySelector('code')?.textContent?.trim();
+			if (!source) continue;
+
+			const container = document.createElement('div');
+			container.className = 'mermaid-diagram';
+			container.textContent = source;
+			pre.replaceWith(container);
+			nodes.push(container);
+		}
+
+		if (nodes.length > 0) {
+			await mermaid.run({ nodes });
+		}
+	}
+
+	renderMermaidInArticle();
+	document.addEventListener('astro:page-load', () => {
+		void renderMermaidInArticle();
+	});
+</script>
