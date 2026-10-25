@@ -1,9 +1,12 @@
 import type { Locale } from "../i18n/ui";
+import { blogPostUrl } from "../lib/blog";
 
 export type Project = {
 	slug: string;
 	landingPath?: string;
 	externalUrl?: string;
+	blogSlug?: string;
+	cardArt?: string;
 	featured: boolean;
 	order: number;
 	title: Record<Locale, string>;
@@ -15,6 +18,7 @@ export const projects: Project[] = [
 	{
 		slug: "beatbob",
 		landingPath: "/beatbob/",
+		cardArt: "/projects/art/beatbob.png",
 		featured: true,
 		order: 1,
 		title: { ru: "BeatBob", en: "BeatBob" },
@@ -27,6 +31,7 @@ export const projects: Project[] = [
 	{
 		slug: "kinonaoborot",
 		landingPath: "/kinonaoborot/",
+		cardArt: "/projects/art/kinonaoborot.jpg",
 		featured: true,
 		order: 2,
 		title: { ru: "Кино наоборот", en: "Kinonaoborot" },
@@ -39,6 +44,7 @@ export const projects: Project[] = [
 	{
 		slug: "tarifmometr",
 		landingPath: "/tarifmometr/",
+		cardArt: "/projects/art/tarifmometr.png",
 		featured: true,
 		order: 3,
 		title: { ru: "Тарифометр", en: "Tarifmometr" },
@@ -51,6 +57,7 @@ export const projects: Project[] = [
 	{
 		slug: "mknc",
 		landingPath: "/mknc/",
+		cardArt: "/projects/art/mknc.jpg",
 		featured: true,
 		order: 4,
 		title: { ru: "МКНЦ FAQ-бот", en: "MKNC FAQ bot" },
@@ -63,6 +70,7 @@ export const projects: Project[] = [
 	{
 		slug: "konek",
 		externalUrl: "https://apps.apple.com/tj/app/konek/id6810789188",
+		cardArt: "/projects/art/konek.jpg",
 		featured: true,
 		order: 5,
 		title: { ru: "Konek", en: "Konek" },
@@ -77,6 +85,7 @@ export const projects: Project[] = [
 	{
 		slug: "magnetology",
 		externalUrl: "https://apps.apple.com/tj/app/magnetology/id789651124",
+		cardArt: "/projects/art/magnetology.png",
 		featured: true,
 		order: 6,
 		title: { ru: "Magnetology", en: "Magnetology" },
@@ -90,7 +99,8 @@ export const projects: Project[] = [
 	},
 	{
 		slug: "padla-picasso",
-		externalUrl: "https://padlapicasso.ru",
+		blogSlug: "padla-picasso",
+		cardArt: "/projects/art/padla-picasso.jpg",
 		featured: true,
 		order: 7,
 		title: { ru: "Padla Picasso", en: "Padla Picasso" },
@@ -114,6 +124,7 @@ export function isAppStoreUrl(url: string): boolean {
 
 export function projectHref(project: Project, locale: Locale = "ru"): string {
 	if (project.externalUrl) return project.externalUrl;
+	if (project.blogSlug) return blogPostUrl(locale, project.blogSlug);
 	if (project.landingPath) {
 		if (locale === "en" && project.slug === "mknc") {
 			return "/en/mknc/";

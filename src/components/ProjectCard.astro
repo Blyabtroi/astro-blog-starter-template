@@ -17,10 +17,20 @@ const ctaLabel = isExternal
 	? isAppStoreUrl(href)
 		? t('projects.appStore')
 		: t('projects.external')
-	: t('projects.open');
+	: project.blogSlug
+		? t('projects.article')
+		: t('projects.open');
 ---
 
-<article class="project-card">
+<article class:list={['project-card', project.cardArt && 'project-card--art']}>
+	{
+		project.cardArt && (
+			<div class="project-card__art" aria-hidden="true">
+				<img src={project.cardArt} alt="" loading="lazy" decoding="async" />
+			</div>
+		)
+	}
+	<div class="project-card__body">
 	<h3>
 		<a
 			href={href}
@@ -47,10 +57,13 @@ const ctaLabel = isExternal
 			{ctaLabel} →
 		</a>
 	</p>
+	</div>
 </article>
 
 <style>
 	.project-card {
+		position: relative;
+		overflow: hidden;
 		border: 1px solid var(--line);
 		border-radius: 12px;
 		padding: 1.25rem 1.35rem;
@@ -58,6 +71,42 @@ const ctaLabel = isExternal
 		transition:
 			box-shadow 0.2s ease,
 			border-color 0.2s ease;
+	}
+
+	.project-card__body {
+		position: relative;
+		z-index: 1;
+	}
+
+	.project-card__art {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		border-radius: inherit;
+		overflow: hidden;
+	}
+
+	.project-card__art img {
+		position: absolute;
+		right: -4%;
+		bottom: -6%;
+		width: min(58%, 280px);
+		max-height: 92%;
+		object-fit: contain;
+		object-position: bottom right;
+		opacity: 0.5;
+		-webkit-mask-image: linear-gradient(
+			to top left,
+			rgba(0, 0, 0, 0.95) 0%,
+			rgba(0, 0, 0, 0.35) 42%,
+			transparent 68%
+		);
+		mask-image: linear-gradient(
+			to top left,
+			rgba(0, 0, 0, 0.95) 0%,
+			rgba(0, 0, 0, 0.35) 42%,
+			transparent 68%
+		);
 	}
 
 	.project-card:hover {
